@@ -1,0 +1,79 @@
+INCLUDE Irvine32.inc
+
+
+.data
+username              db 20 dup(?)                
+password        db 20 dup(?)            
+enteredUsername     db 20 dup(?)         
+enteredPassword        db 20 dup(?)      
+registerMsg                 db "rregister: ", 0         
+loginMsg            db "login: ", 0               
+usernameMsg        db "enter your name: ", 0         
+passwordMsg     db "enter you password: ", 0            
+successMsg        db "login successfful", 0          
+failureMsg                db "login failed!", 0       
+
+.code
+main proc
+    
+    mov     edx, offset registerMsg
+    call     WriteString
+
+   mov    edx, offset usernameMsg
+    call    WriteString
+   mov        edx, offset username
+    mov     ecx, 20
+    call     ReadString
+
+    
+    mov     edx, offset passwordMsg
+   call    WriteString
+    mov     edx, offset password
+   mov        ecx, 20
+    call      ReadString
+
+        mov     edx, offset loginMsg
+    call     WriteString
+
+    
+    mov     edx, offset usernameMsg
+   call     WriteString
+    mov     edx, offset enteredUsername
+   mov     ecx, 20
+    call     ReadString
+
+    
+    mov      edx, offset passwordMsg
+   call     WriteString
+    mov     edx, offset enteredPassword
+     mov     ecx, 20
+   call     ReadString
+
+    
+   mov     esi, offset username
+    mov     edi, offset enteredUsername
+   mov     ecx, 20
+    repe    cmpsb
+   jne    LoginFailed
+
+    mov     esi, offset password
+   mov     edi, offset enteredPassword
+    mov     ecx, 20
+      repe    cmpsb
+    jne    LoginFailed
+
+    
+    mov     edx, offset successMsg
+      call    WriteString
+     jmp     ExitProgram
+
+LoginFailed:
+    mov     edx, offset failureMsg
+      call     WriteString
+
+ExitProgram:
+    call     WaitMsg
+      exit
+
+main endp
+    end main
